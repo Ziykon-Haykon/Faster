@@ -1,0 +1,39 @@
+body {
+    background-color: #2d2d2d;
+    color: white;
+    font-family: Arial;
+}
+
+h1 {
+    color: #459aef;
+    text-align: center;
+}
+
+.form_input_name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10rem;
+
+    input {
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        width: 200px;
+        background-color: #7e7e7e;
+    }
+
+    input::placeholder {
+    color: rgb(0, 0, 0);
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #2772bc;
+        color: white;
+        cursor: pointer;
+    }
+}
