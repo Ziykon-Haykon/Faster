@@ -15,13 +15,20 @@ def index(request: Request):
 
 @app.post("/hello", response_class=HTMLResponse)
 def say_hello(request: Request, name: str = Form(...), age: int = Form(...)):
+
+    message = f"Привет, {name}, возраст {age}"
+
+    if age > 120:
+        message = "либо очень старый, либо возраст нетот"
+
     return templates.TemplateResponse(
-        "hello.html", 
+        "hello.html",
         {
-            "request": request, 
-            "name": name,
-            "age": age
-        })
+            "request": request,
+            "message": message
+        }
+    )
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    
