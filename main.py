@@ -17,29 +17,15 @@ def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/hello", response_class=HTMLResponse)
-def say_hello(request: Request, name: str = Form(...), age: int = Form(...)):
+def say_hello(request: Request, name: str = Form(...), age: int = Form(...), password: str = Form(...)):
     db = SessionLocal()
-    user = User(name = name, age = age)
+    user = User(name = name, age = age, password = password)
     db.add(user)
     db.commit()
     db.close
-    
-    message = f"Привет, {name}, возраст {age}"
 
-    if age > 120:
-        message = "либо очень старый, либо возраст нетот"
+    message = f"name is {name}, age is {age}, password is {password}"
 
-    return templates.TemplateResponse(
-        "hello.html",
-        {
-            "request": request,
-            "message": message
-        }
-    )
-
-@app.post("/age", response_class=HTMLResponse)
-def change_age(request: Request, age: int = Form(...), name: str = Form(...)):
-    message = f"Привет, {name}, возраст {age}"
     return templates.TemplateResponse(
         "hello.html",
         {

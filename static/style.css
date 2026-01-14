@@ -9,6 +9,28 @@ h1 {
     text-align: center;
 }
 
+.auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    .hidden {
+        display: none;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #2772bc;
+        color: white;
+        cursor: pointer;
+    }
+}
+
+
+
 .form_input_name {
     display: flex;
     flex-direction: column;
@@ -35,5 +57,9 @@ h1 {
         background-color: #2772bc;
         color: white;
         cursor: pointer;
+    }
+    h4 {
+        margin-bottom: 0.1rem;
+        margin-top: 0.1rem;
     }
 }
