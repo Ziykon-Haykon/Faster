@@ -4,9 +4,12 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 from pydantic import BaseModel
+from db.database import SessionLocal, engine
+from db.models import User, Base
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+Base.metadata.create_all(engine)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
@@ -15,7 +18,12 @@ def index(request: Request):
 
 @app.post("/hello", response_class=HTMLResponse)
 def say_hello(request: Request, name: str = Form(...), age: int = Form(...)):
-
+    db = SessionLocal()
+    user = User(name = name, age = age)
+    db.add(user)
+    db.commit()
+    db.close
+    
     message = f"Привет, {name}, возраст {age}"
 
     if age > 120:
