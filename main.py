@@ -16,10 +16,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.post("/hello", response_class=HTMLResponse)
-def say_hello(request: Request, name: str = Form(...), age: int = Form(...), password: str = Form(...)):
+@app.post("/register", response_class=HTMLResponse)
+def say_hello(request: Request, name: str = Form(...), email: str = Form(...), age: int = Form(...), password: str = Form(...)):
     db = SessionLocal()
-    user = User(name = name, age = age, password = password)
+    user = User(name = name, email=email, age = age, password = password)
     db.add(user)
     db.commit()
     db.close
@@ -34,11 +34,20 @@ def say_hello(request: Request, name: str = Form(...), age: int = Form(...), pas
         }
     )
 
-@app.post("login", response_class=HTMLResponse)
+@app.post("/login", response_class=HTMLResponse)
 def login(request: Request, email: str = Form(...), password: str = Form(...)):
     user = user_get_by_email(email = email, password = password)
-    message = "неверные данные"
     if not user:
+        message = "неверные данные"
+        return templates.TemplateResponse(
+            "hello.html",
+            {
+                "request": request,
+                "message": message
+            }
+        )
+    else:
+        message = f"name is {user.name}, age is {user.age}, password is {password}"
         return templates.TemplateResponse(
             "hello.html",
             {
@@ -49,7 +58,7 @@ def login(request: Request, email: str = Form(...), password: str = Form(...)):
 
 def user_get_by_email(email: str = Form(...), password: str = Form(...)):
     db = SessionLocal()
-    user = db.query(User).filter(User.email == email, User.password == password).fisrt()
+    user = db.query(User).filter(User.email == email, User.password == password).first()
     db.close()
     return user
 

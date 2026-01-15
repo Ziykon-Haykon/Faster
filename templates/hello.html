@@ -5,11 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/style.css">
     <title>Hello</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .containerBtnOut {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .btnOut {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #2772bc;
+        color: white;
+        cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <form action="/hello" method="post" class="form_input_name">    
+    <form class="form_input_name">    
     <h1>{{ message }}</h1>
     </form>
+    <div class="containerBtnOut">
+        <button class="btnOut" href="index.html">
+            Выйти назад
+        </button>
+    </div>
     <div>
         <form>
             
