@@ -36,32 +36,21 @@ def say_hello(request: Request, name: str = Form(...), email: str = Form(...), a
 
 @app.post("/login", response_class=HTMLResponse)
 def login(request: Request, email: str = Form(...), password: str = Form(...)):
-    user = user_get_by_email(email = email, password = password)
-    if not user:
-        message = "неверные данные"
-        return templates.TemplateResponse(
-            "hello.html",
-            {
-                "request": request,
-                "message": message
-            }
-        )
-    else:
-        message = f"name is {user.name}, age is {user.age}, password is {password}"
-        return templates.TemplateResponse(
-            "hello.html",
-            {
-                "request": request,
-                "message": message
-            }
-        )
+    user = user_get_by_email(email=email, password=password)
+    message = f"name is {user.name}, age is {user.age}, password is {password}"
+    return templates.TemplateResponse(
+        "hello.html",
+        {
+            "request": request,
+            "message": message
+        }
+    )
 
 def user_get_by_email(email: str = Form(...), password: str = Form(...)):
     db = SessionLocal()
     user = db.query(User).filter(User.email == email, User.password == password).first()
     db.close()
     return user
-
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
