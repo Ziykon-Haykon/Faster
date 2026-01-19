@@ -6,22 +6,43 @@
     <link rel="stylesheet" href="/static/style.css">
     <title>Document</title>
     <style>
-        .IWannaLog {
-            margin-top: 1rem;
-            margin-left: 24.3%;
-        }
-         .IWannaReg {
-            margin-top: 1rem;
-            margin-left: 20%;
-         }
+    .auth {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .auth .hidden {
+        display: none;
+    }
+    .auth button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #2772bc;
+        color: white;
+        cursor: pointer;
+    }
+    .auth .IWannaLog {
+        margin-top: 1rem;
+        margin-left: 24.3%;
+    }
+    .auth .IWannaReg {
+        margin-top: 1rem;
+        margin-left: 20%;
+    }
     </style>
 </head>
 <body>
     <div class="auth">
 
-        <div class="register" id="register" >
+        {% if message %}
+        <div class="alert">{{ message }}</div>
+        {% endif %}
 
-            <form id="formRegister" action="/register" method="post" class="form_input_name">
+        <div id="register" class="register {% if show == 'login' or show == 'none' %}hidden{% endif %}">
+
+            <form id="formRegister" class="form_input_name" method="post" action="/register">
                 <h1>Hello everynyan</h1>
                 <h4>Input your name</h4>
                 <input id="name" type="text" name="name" placeholder="Input the name">
@@ -34,19 +55,18 @@
                 <button type="submit">Register</button>
             </form>
 
-            <button class="IWannaLog" onclick="showLogin()">I wanna Login</button>
+            <button type="button" class="IWannaLog">I wanna Login</button>
         </div>
-        <div class="hidden" id="login" >
-
-            <form id="formLogin" action="/login" method="post" class="form_input_name">
+        <div id="login" class="{% if show != 'login' %}hidden{% endif %}">
+            <form id="formLogin" class="form_input_name" method="post" action="/login">
                 <h1>Welcome back</h1>
                 <h4>Input your email</h4>
-                <input id="name" type="email" name="email" placeholder="Input the email">
+                <input id="emailLogin" type="email" name="email" placeholder="Input the email">
                 <h4>Input your password</h4>
-                <input id="password" type="password" name="password" placeholder="Input the password">
+                <input id="passwordLogin" type="password" name="password" placeholder="Input the password">
                 <button type="submit">Login</button>
             </form>
-            <button class="IWannaReg" onclick="showRegister()">I wanna register</button>
+            <button type="button" class="IWannaReg">I wanna register</button>
 
         </div>
     </div>

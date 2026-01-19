@@ -2,41 +2,22 @@ const login = document.getElementById("login");
 const register = document.getElementById("register");
 
 function showRegister() {
-    login.classList.add("hidden");
-    register.classList.remove("hidden");
+    if (login) login.classList.add("hidden");
+    if (register) register.classList.remove("hidden");
 }
 
 function showLogin() {
-    register.classList.add("hidden");
-    login.classList.remove("hidden");
+    if (register) register.classList.add("hidden");
+    if (login) login.classList.remove("hidden");
 }
 
-const formReg = document.getElementById("formRegister");
-const formLog = document.getElementById("formLogin");
+window.showRegister = showRegister;
+window.showLogin = showLogin;
 
-formLog.onsubmit = function(e) {
-    e.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    if (!email || !password) {
-        alert("Заполните все поля!");
-        return;
-    }
-    formLog.submit();
-}
-
-formReg.onsubmit = function(e) {
-    e.preventDefault();
-
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const age = document.getElementById("age").value;
-
-    if (!name || !email || !password || !age) {
-        alert("Заполните все поля!");
-        return;
-    }
-
-    formReg.submit();
-};
+document.addEventListener('DOMContentLoaded', () => {
+    const btnToLogin = document.querySelector('.IWannaLog');
+    const btnToRegister = document.querySelector('.IWannaReg');
+    if (btnToLogin) btnToLogin.addEventListener('click', (e) => { e.preventDefault(); showLogin(); });
+    if (btnToRegister) btnToRegister.addEventListener('click', (e) => { e.preventDefault(); showRegister(); });
+    console.log('auth script initialized', { login, register, btnToLogin, btnToRegister });
+});
