@@ -1,11 +1,12 @@
 from fastapi import FastAPI, Request, Form, APIRouter, Depends, HTTPException, status
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 from pydantic import BaseModel
 from db.database import SessionLocal, engine
-from db.models import User, Base
+from db.models import User, Cart, CartItem, Order, OrderItem, Product, Base
+from store import add_product
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -65,6 +66,18 @@ def user_get_by_email(email: str, password: str):
         return 
     else:
         return user
+
+@app.post("/addProduct")
+def add_product_main(request: Request, title: str = Form(...), price: float = Form(...)):
+    db = SessionLocal()
+    product = add_product(db=db, title=title, price=price)
+    db.close()
+    return {
+        "id": product.id,
+        "title": product.title,
+        "price": product.price
+    }
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

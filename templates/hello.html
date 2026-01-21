@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/headerHello.css">
+
     <title>Hello</title>
     <style>
         html, body {
@@ -15,7 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: auto;
         }
 
         .btnOut {
@@ -26,21 +28,230 @@
             color: white;
             cursor: pointer;
         }
+
+        #popupDialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        h1 {
+            color: green;
+        }
+
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-id {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 20px;
+            color: #2772bc;
+            font-weight: bold;
+        }
+
+        #popupDialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 300px;
+        }
+
+        #popupDialog h3 {
+            margin-top: 0;
+        }
+
+        #popupDialog input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .popup-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .popup-buttons button[type="submit"] {
+            background-color: #2772bc;
+            color: white;
+        }
+
+        .popup-buttons button[type="submit"]:hover {
+            background-color: #1f5a9e;
+        }
+
+        .popup-buttons button[type="button"] {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        .popup-buttons button[type="button"]:hover {
+            background-color: #ccc;
+        }
     </style>
 </head>
 <body>
-    <form class="form_input_name">    
+<header>  
     <h1>{{ message }}</h1>
-    </form>
-    <div class="containerBtnOut">
+</header>        
+
+<main class="content">
+    <div>
+        <button onclick="popupFn()">Добавить товар</button>
+        <div id="overlay"></div>
+        <div id="popupDialog">
+            <h3>Добавить новый товар</h3>
+            <form id="addProductForm">
+                <input type="text" name="title" placeholder="Название товара" required>
+                <input type="number" name="price" placeholder="Цена" step="0.01" required>
+                <div class="popup-buttons">
+                    <button type="submit">Добавить</button>
+                    <button type="button" onclick="closeFn()">Отменить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Контейнер для отображения товаров -->
+    <div id="productsContainer" class="products-container">
+    </div>
+</main>
+
+<footer class="footer">
+   <div class="containerBtnOut">
         <a class="btnOut" href="/">
             Выйти назад
         </a>
     </div>
-    <div>
-        <form>
-            
-        </form>
-    </div>
+</footer>
+<script>
+function popupFn() {
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("popupDialog").style.display = "block";
+}
+
+function closeFn() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("popupDialog").style.display = "none";
+}
+
+// Обработка отправки формы
+document.getElementById("addProductForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    try {
+        const response = await fetch("/addProduct", {
+            method: "POST",
+            body: formData
+        });
+        
+        if (response.ok) {
+            const product = await response.json();
+            addProductCard(product);
+            closeFn();
+            document.getElementById("addProductForm").reset();
+        } else {
+            alert("Ошибка при добавлении товара");
+        }
+    } catch (error) {
+        console.error("Ошибка:", error);
+        alert("Ошибка при добавлении товара");
+    }
+});
+
+// Функция для добавления карточки товара на страницу
+function addProductCard(product) {
+    const container = document.getElementById("productsContainer");
+    
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+        <div class="product-id">ID: ${product.id}</div>
+        <div class="product-title">${product.title}</div>
+        <div class="product-price">${product.price}₽</div>
+    `;
+    
+    container.appendChild(card);
+}
+
+window.addEventListener("scroll", () => {
+    if (window.scrollY >= 30) {
+        document.body.classList.add("sticky-header");
+    } else {
+        document.body.classList.remove("sticky-header");
+    }
+});
+</script>
 </body>
 </html>
