@@ -181,7 +181,6 @@
         </div>
     </div>
 
-    <!-- Контейнер для отображения товаров -->
     <div id="productsContainer" class="products-container">
     </div>
 </main>
@@ -204,7 +203,6 @@ function closeFn() {
     document.getElementById("popupDialog").style.display = "none";
 }
 
-// Обработка отправки формы
 document.getElementById("addProductForm").addEventListener("submit", async function(e) {
     e.preventDefault();
     
@@ -230,7 +228,6 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
     }
 });
 
-// Функция для добавления карточки товара на страницу
 function addProductCard(product) {
     const container = document.getElementById("productsContainer");
     
